@@ -10,23 +10,43 @@ if exist "%~dp0ShopSphere\target\ShopSphere.war" (
     set "WAR_FILE=%~dp0ShopSphere\target\ShopSphere.war"
 ) else if exist "%~dp0JAVA_PROJECT\ShopSphere\target\ShopSphere.war" (
     set "WAR_FILE=%~dp0JAVA_PROJECT\ShopSphere\target\ShopSphere.war"
-) else if exist "P:\CODING\ADV. JAVA LAB\JAVA_PROJECT\ShopSphere\target\ShopSphere.war" (
-    set "WAR_FILE=P:\CODING\ADV. JAVA LAB\JAVA_PROJECT\ShopSphere\target\ShopSphere.war"
 )
+
+rem Auto-detect Tomcat directory
+set "TOMCAT_DIR="
+if exist "%USERPROFILE%\Downloads\apache-tomcat-11.0.26\apache-tomcat-11.0.26\bin\startup.bat" (
+    set "TOMCAT_DIR=%USERPROFILE%\Downloads\apache-tomcat-11.0.26\apache-tomcat-11.0.26"
+) else if exist "C:\Users\HP\Downloads\apache-tomcat-11.0.26\apache-tomcat-11.0.26\bin\startup.bat" (
+    set "TOMCAT_DIR=C:\Users\HP\Downloads\apache-tomcat-11.0.26\apache-tomcat-11.0.26"
+) else if exist "%USERPROFILE%\Downloads\apache-tomcat-11.0.26\bin\startup.bat" (
+    set "TOMCAT_DIR=%USERPROFILE%\Downloads\apache-tomcat-11.0.26"
+)
+
+if "%TOMCAT_DIR%"=="" (
+    echo [ERROR] Could not find Tomcat installation directory!
+    pause
+    exit /b 1
+)
+
+echo Tomcat Directory: %TOMCAT_DIR%
 
 if not "%WAR_FILE%"=="" (
     echo Deploying latest ShopSphere.war to Tomcat webapps...
-    copy /Y "%WAR_FILE%" "P:\DEV TOOLS\apache-tomcat-11.0.26\webapps\"
-) else (
-    echo [WARNING] ShopSphere.war not found yet in target. Using existing deployment if present.
+    copy /Y "%WAR_FILE%" "%TOMCAT_DIR%\webapps\"
+)
+
+if "%JAVA_HOME%"=="" (
+    set "JAVA_HOME=C:\Program Files\Java\jdk-17"
 )
 
 echo.
-echo Launching Tomcat Server in new window...
-echo Once Tomcat says "Server startup in [X] milliseconds", open:
+echo Launching Tomcat Server...
+echo Once Tomcat starts, open: http://localhost:8080/ShopSphere/
 echo.
-echo    http://localhost:8080/ShopSphere/
-echo.
-start "Apache Tomcat 11 - ShopSphere" "P:\DEV TOOLS\apache-tomcat-11.0.26\bin\startup.bat"
-echo Tomcat window opened! You can close this terminal.
-pause
+
+cd /d "%TOMCAT_DIR%\bin"
+set "CATALINA_HOME=%TOMCAT_DIR%"
+set "CATALINA_BASE=%TOMCAT_DIR%"
+start "Apache Tomcat 11 - ShopSphere" cmd.exe /k "catalina.bat run"
+
+echo Tomcat window opened!

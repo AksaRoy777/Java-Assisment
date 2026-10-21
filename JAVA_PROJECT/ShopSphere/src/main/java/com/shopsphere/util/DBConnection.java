@@ -31,7 +31,7 @@ public class DBConnection {
             + "&rewriteBatchedStatements=true";
 
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "mydevsql";
+    private static final String PASSWORD = "root";
 
     private static final int MAX_POOL_SIZE = 15;
     private static final BlockingQueue<Connection> pool = new ArrayBlockingQueue<>(MAX_POOL_SIZE);

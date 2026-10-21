@@ -20,7 +20,7 @@ if "%SQL_FILE%"=="" (
     exit /b 1
 )
 
-"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -pmydevsql < "%SQL_FILE%"
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -pcodewithyash < "%SQL_FILE%"
 if %ERRORLEVEL% equ 0 (
     echo.
     echo ========================================================
